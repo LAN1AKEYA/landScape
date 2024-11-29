@@ -1,0 +1,124 @@
+:root {
+    --ac-color: #ffffff;
+    --bg-color: #000000;
+}
+
+body {
+    margin: 0;
+}
+::selection {
+    background-color: var(--ac-color);
+    color: var(--bg-color);
+}
+main {
+    background-color: black;
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 10fr;
+}
+#frame {
+    color: var(--ac-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+#grid {
+    position: fixed;
+    display: grid;
+    gap: 1px;
+    background-color: var(--bg-color);
+}
+.cell {
+    border: 1px solid #787878;
+}
+.selectedCell {
+    background-color: var(--ac-color);
+}
+
+.hideBox {
+    position: fixed;
+    background-color: var(--bg-color);
+    overflow: hidden;
+}
+#top {
+    top: 0;
+    width: 100%;
+    height: 165px;
+}
+#right {
+    right: 0;
+    width: 165px;
+    height: calc(100vh - (165px * 2));
+}
+#bottom {
+    bottom: 0;
+    width: 100%;
+    height: 165px;
+}
+#left {
+    margin-left: 300px;
+    left: 0;
+    width: 165px;
+    height: calc(100vh - (165px * 2));
+}
+#control {
+    border: solid var(--ac-color);
+    border-width: 0 1px 0 0;
+    color: var(--ac-color);
+    font-size: 20px;
+    font-family: Verdana;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    position: absolute;
+    z-index: 1;
+    width: 300px;
+    height: 100vh;
+    box-sizing: border-box;
+    background-color: var(--bg-color);
+}
+#controlPlaceholder {
+    min-width: 300px;
+    
+}
+.col {
+    width: 100%;
+    display: grid;
+    gap: 5px;
+    padding: 10px 0;
+}
+.col:not(:last-child) {
+    border: solid var(--ac-color);
+    border-width: 0 0 1px 0;
+}
+.col-2 {
+    grid-template-columns: 1fr 1fr;
+}
+.col-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+input {
+    box-sizing: border-box;
+    font-size: 20px;
+    background-color: var(--bg-color);
+    color: var(--ac-color);
+    border: 1px solid var(--ac-color);
+    outline: 0;
+}
+input[type="text"] {
+    max-width: 180px;
+}
+input[type="number"] {
+    max-width: 70px;
+}
+textarea {
+    height: 300px;
+    resize: none;
+    outline: 0;
+    background-color: var(--bg-color);
+    color: var(--ac-color);
+    border: 1px solid var(--ac-color);
+}

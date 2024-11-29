@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="dev/configStyle.css">
+        <title>Generator - landScape</title>
+    </head>
+    <body>
+
+        <main>
+
+            <div id="control">
+                <div class="col col-2">
+                    <span>father id</span><input type="text" id="fatherId">
+                </div>
+                <div class="col col-3">
+                    <span>width</span><input type="range" id="widthRan"
+                        value="30" min="1" max="50"><input type="number"
+                        id="widthNum" value="30" min="1" max="50">
+                </div>
+                <div class="col col-3">
+                    <span>height</span><input type="range" id="heightRan"
+                        value="30" min="1" max="50"><input type="number"
+                        id="heightNum" value="30" min="1" max="50">
+                </div>
+                <div class="col col-3">
+                    <span>gap</span><input type="range" id="gapRan" value="15"
+                        min="1" max="30"><input type="number" id="gapNum"
+                        value="15" min="1" max="30">
+                </div>
+                <div class="col col-3">
+                    <span>radius</span><input type="range" id="radiusRan"
+                        value="15" min="1" max="30"><input type="number"
+                        id="radiusNum" value="15" min="1" max="30">
+                </div>
+                <div class="col col-3">
+                    <span>cols</span><input type="range" id="colsRan" value="10"
+                        min="1" max="100"><input type="number" id="colsNum"
+                        value="10" min="1" max="100">
+                </div>
+                <div class="col col-3">
+                    <span>rows</span><input type="range" id="rowsRan" value="10"
+                        min="1" max="100"><input type="number" id="rowsNum"
+                        value="10" min="1" max="100">
+                </div>
+                <div class="col">
+                    <textArea id="outputArea"></textArea>
+                </div>
+                <div class="col col-2">
+                    <button id="clearButton">clear</button>
+                    <button id="copyButton">copy</button>
+                </div>
+            </div>
+            <div id="controlPlaceholder"></div>
+
+            <div id="frame">
+                <div id="grid">
+
+                </div>
+                <div class="hideBox" id="top"></div>
+                <div class="hideBox" id="right"></div>
+                <div class="hideBox" id="bottom"></div>
+                <div class="hideBox" id="left"></div>
+            </div>
+
+        </main>
+
+        <script src="dev/configScript.js"></script>
+
+    </body>
+</html>

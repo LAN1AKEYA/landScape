@@ -1,0 +1,13 @@
+{
+    "idContain": "contain",
+    "gap": 15,
+    "lineWidth": 50,
+    "lineHeight": 50,
+    "lineRadius": 30,
+    "widthFrame": 10,
+    "heightFrame": 10,
+    "counter": 2,
+    "sensitivy": 200,
+    "invert": false,
+    "lines": []
+}
