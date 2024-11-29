@@ -100,6 +100,9 @@ main {
 .col-3 {
     grid-template-columns: 1fr 1fr 1fr;
 }
+span {
+    cursor: default;
+}
 input {
     box-sizing: border-box;
     font-size: 20px;
@@ -107,9 +110,14 @@ input {
     color: var(--ac-color);
     border: 1px solid var(--ac-color);
     outline: 0;
+    border-radius: 3px;
+    accent-color: var(--ac-color);
 }
 input[type="text"] {
     max-width: 180px;
+}
+input[type="range"] {
+    cursor: pointer;
 }
 input[type="number"] {
     max-width: 70px;
@@ -121,4 +129,20 @@ textarea {
     background-color: var(--bg-color);
     color: var(--ac-color);
     border: 1px solid var(--ac-color);
+}
+button {
+    cursor: pointer;
+    font-size: 20px;
+    background-color: var(--bg-color);
+    color: var(--ac-color);
+    border: 1px solid var(--ac-color);
+    padding: 5px;
+    transition: 0.3s;
+    border-radius: 3px;
+    position: relative;
+}
+button:hover {
+    background-color: var(--ac-color);
+    color: var(--bg-color);
+    transform: scale(103%);
 }
