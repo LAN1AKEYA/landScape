@@ -1,6 +1,6 @@
 # landScape
 
-<a href=""><b>Russian README</b></a>
+<a href="https://github.com/LAN1AKEYA/landScape/blob/master/README-ru.md"><b>Russian README</b></a>
 
 landScape is a simple library for creating design elements consisting of dynamic lines that react to the movement of the user's cursor.
 
