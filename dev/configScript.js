@@ -328,7 +328,7 @@ grid.addEventListener('mousemove', (event) => {
     const positionX = event.clientX - leftBlock.offsetWidth - 300;
     const positionY = event.clientY - topBlock.offsetHeight;
 
-    hoverItem = [Math.floor(positionX / (config.lineWidth + config.gap)), Math.floor(positionY / (config.lineHeight + config.gap))]
+    hoverItem = [Math.floor(positionX / (Number(config.lineWidth) + Number(config.gap))), Math.floor(positionY / (Number(config.lineHeight) + Number(config.gap)))]
 
     if (mouseDownSwitch) {
 
@@ -358,7 +358,7 @@ grid.addEventListener('mousedown', (event) => {
     const positionX = event.clientX - leftBlock.offsetWidth - 300;
     const positionY = event.clientY - topBlock.offsetHeight;
 
-    hoverItem = [Math.floor(positionX / (config.lineWidth + config.gap)), Math.floor(positionY / (config.lineHeight + config.gap))]
+    hoverItem = [Math.floor(positionX / (Number(config.lineWidth) + Number(config.gap))), Math.floor(positionY / (Number(config.lineHeight) + Number(config.gap)))]
     
     figure.firstPoint = hoverItem;
     figure.secondPoint = hoverItem;
