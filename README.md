@@ -1,5 +1,7 @@
 # landScape
 
+<a href=""><b>Russian README</b></a>
+
 landScape is a simple library for creating design elements consisting of dynamic lines that react to the movement of the user's cursor.
 
 Currently, this library is in testing mode. The main engine has sufficient functionality and no critical errors, unlike the configuration editor, which cannot fully implement all the engine's features. Nevertheless, I plan to address many of these shortcomings in the future.
