@@ -44,7 +44,7 @@ const template = {
     lines: []
 }
 
-let config = Object.assign({}, template);
+let config = JSON.parse(JSON.stringify(template));
 
 for (let r = 0; r < 100; r++) {
     for (let c = 0; c < 100; c++) {
@@ -70,15 +70,12 @@ function updateGap() {
 }
 function updateRad() {
     radiusRan.value = radiusNum.value = config.lineRadius;
-    for (let cell of document.querySelectorAll('.startPoint, .endPoint')) {
-        if (cell.classList.contains('startPoint')) {
-            cell.style.borderTopLeftRadius = `${config.lineRadius}px`;
-            cell.style.borderTopRightRadius = `${config.lineRadius}px`;
-        }
-        if (cell.classList.contains('endPoint')) {
-            cell.style.borderBottomLeftRadius = `${config.lineRadius}px`;
-            cell.style.borderBottomRightRadius = `${config.lineRadius}px`;
-        }
+    for (item of figuresBank) {
+        document.querySelector(`.r-${item.topLeftCell[1]}.c-${item.topLeftCell[0]}`).style.borderTopLeftRadius = `${config.lineRadius}px`;
+        document.querySelector(`.r-${item.topLeftCell[1]}.c-${item.bottomRightCell[0]}`).style.borderTopRightRadius = `${config.lineRadius}px`;
+        document.querySelector(`.r-${item.bottomRightCell[1]}.c-${item.topLeftCell[0]}`).style.borderBottomLeftRadius = `${config.lineRadius}px`;
+        document.querySelector(`.r-${item.bottomRightCell[1]}.c-${item.bottomRightCell[0]}`).style.borderBottomRightRadius = `${config.lineRadius}px`;
+
     }
 }
 function updateCols() {
@@ -151,16 +148,6 @@ function update(type) {
 }
 
 update('all');
-
-
-
-
-
-
-
-let hoverSwitch, clickSwitch = false;
-let linesArray = [];
-
 
 
 fatherId.onchange = () => {
@@ -242,61 +229,158 @@ rowsNum.oninput = () => {
 
 }
 
-let startPoint, endPoint;
+function updateFigures(comand, figure) {
+    switch (comand) {
+        case "add":
+            config.lines.push({
+                position: {
+                    width: {
+                        start: figure.topLeftCell[0] + 1,
+                        end: figure.bottomRightCell[0] + 2
+                    },
+                    height: {
+                        start: figure.topLeftCell[1] + 1,
+                        end: figure.bottomRightCell[1] + 2
+                    }
+                },
+                force: figure.force,
+                duration: figure.duration,
+                color: figure.color
+            })
+            break;
+    }
 
-document.addEventListener('mousemove', (event) => {
-    if (event.target.classList.contains('cell')) {
-        hoverSwitch = true;
-        if (clickSwitch) {
-            document.querySelector(`.${startPoint.classList[2]}.${event.target.classList[1]}`).classList.add('selectedCell');
+}
+
+class Figure {
+    constructor(force, duration, color) {
+        this.topLeftCell = [];
+        this.bottomRightCell = [];
+        this.firstPoint = [];
+        this.secondPoint = [];
+        this.force = force;
+        this.duration = duration;
+        this.color = color;
+    }
+}
+
+let figure;
+let figuresBank = [];
+let mouseDownSwitch = false;
+
+function updateRadius() {
+    for (cell of figure.reservedCells) {
+
+        if (cell.classList.contains(`r-${figure.topLeftCell[1]}`) && cell.classList.contains(`c-${figure.topLeftCell[0]}`)) {
+            cell.style.borderTopLeftRadius = `${config.lineRadius}px`;
+            cell.classList.add('radiusTopLeft');
+        }
+        if (cell.classList.contains(`r-${figure.bottomRightCell[1]}`) && cell.classList.contains(`c-${figure.topLeftCell[0]}`)) {
+            cell.style.borderBottomLeftRadius = `${config.lineRadius}px`;
+            cell.classList.add('radiusBottomLeft');
+        }
+        if (cell.classList.contains(`r-${figure.topLeftCell[1]}`) && cell.classList.contains(`c-${figure.bottomRightCell[0]}`)) {
+            cell.style.borderTopRightRadius = `${config.lineRadius}px`;
+            cell.classList.add('radiusTopRight');
+        }
+        if (cell.classList.contains(`r-${figure.bottomRightCell[1]}`) && cell.classList.contains(`c-${figure.bottomRightCell[0]}`)) {
+            cell.style.borderBottomRightRadius = `${config.lineRadius}px`;
+            cell.classList.add('radiusBottomRight');
         }
     }
-    else {
-        hoverSwitch = false;
+}
+
+
+function visualUpdate() {
+    requestAnimationFrame(() => {
+
+
+        let selectedCellsBank = [];
+        for (let rw = figure.topLeftCell[1]; rw <= figure.bottomRightCell[1]; rw++) {
+            for (let cl = figure.topLeftCell[0]; cl <= figure.bottomRightCell[0]; cl++) {
+                selectedCellsBank.push(document.querySelector(`.c-${cl}.r-${rw}`));
+            }
+        } 
+
+        if (figure.reservedCells.length < selectedCellsBank.length) {
+            figure.reservedCells = selectedCellsBank;
+            for (cell of figure.reservedCells) {
+                cell.style.borderRadius = '';
+                cell.style.backgroundColor = figure.color;
+            }
+            updateRadius();
+            
+        }
+        else if ((figure.reservedCells.length > selectedCellsBank.length)) {
+            const minus = figure.reservedCells.filter(el => !selectedCellsBank.includes(el));
+            for (cell of minus) {
+                cell.style.backgroundColor = '';
+                cell.style.borderRadius = '';
+            }
+            figure.reservedCells = selectedCellsBank;
+            updateRadius();
+        }
+    })
+}
+
+
+grid.addEventListener('mousemove', (event) => {
+    const positionX = event.clientX - leftBlock.offsetWidth - 300;
+    const positionY = event.clientY - topBlock.offsetHeight;
+
+    hoverItem = [Math.floor(positionX / (config.lineWidth + config.gap)), Math.floor(positionY / (config.lineHeight + config.gap))]
+
+    if (mouseDownSwitch) {
+
+        figure.secondPoint = hoverItem;
+
+        figure.topLeftCell = [
+            (figure.firstPoint[0] <= figure.secondPoint[0]) ? figure.firstPoint[0] : figure.secondPoint[0],
+            (figure.firstPoint[1] <= figure.secondPoint[1]) ? figure.firstPoint[1] : figure.secondPoint[1]
+        ];
+        figure.bottomRightCell = [
+            (figure.firstPoint[0] >= figure.secondPoint[0]) ? figure.firstPoint[0] : figure.secondPoint[0],
+            (figure.firstPoint[1] >= figure.secondPoint[1]) ? figure.firstPoint[1] : figure.secondPoint[1]
+        ]
+
+        visualUpdate();
+
+        console.log(`FP-${figure.firstPoint}`, `SP-${figure.secondPoint}`, `TL-${figure.topLeftCell}`, `BR-${figure.bottomRightCell}`)
+
     }
+
 })
 
-document.addEventListener('mousedown', (event) => {
-    if (hoverSwitch) {
-        hoverSwitch = false;
-        clickSwitch = true;
+grid.addEventListener('mousedown', (event) => {
+    mouseDownSwitch = true;
+    figure = new Figure(1.001, 1, '#ffffff');
 
-        startPoint = event.target;
+    const positionX = event.clientX - leftBlock.offsetWidth - 300;
+    const positionY = event.clientY - topBlock.offsetHeight;
 
-        startPoint.style.borderTopLeftRadius = `${config.lineRadius}px`;
-        startPoint.style.borderTopRightRadius = `${config.lineRadius}px`;
-        startPoint.classList.add('selectedCell');
-        startPoint.classList.add('startPoint');
-    }
+    hoverItem = [Math.floor(positionX / (config.lineWidth + config.gap)), Math.floor(positionY / (config.lineHeight + config.gap))]
+    
+    figure.firstPoint = hoverItem;
+    figure.secondPoint = hoverItem;
+
+    figure.reservedCells = [];
+
+    figure.topLeftCell = figure.firstPoint;
+    figure.bottomRightCell = figure.firstPoint;
+
+    visualUpdate();
 })
 
 document.addEventListener('mouseup', (event) => {
-    if (clickSwitch) {
-        endPoint = document.querySelector(`.${startPoint.classList[2]}.${event.target.classList[1]}`);
-        clickSwitch = false;
-        endPoint.style.borderBottomLeftRadius = `${config.lineRadius}px`;
-        endPoint.style.borderBottomRightRadius = `${config.lineRadius}px`;
-        endPoint.classList.add('endPoint');
-
-        linesArray.push({
-            position: {
-                width: {
-                    start: Number(startPoint.classList[2].slice(2, 5)) + 1,
-                    end: Number(endPoint.classList[2].slice(2, 5)) + 1
-                },
-                height: {
-                    start: Number(startPoint.classList[1].slice(2, 5)) + 1,
-                    end: Number(endPoint.classList[1].slice(2, 5)) + 2
-                }
-            },
-            force: 1.001,
-            duration: 1
-        })
-        config.lines = linesArray;
+    if (mouseDownSwitch) {
+        figuresBank.push(figure);
+        updateFigures('add', figure);
         updateOutput();
-
     }
+    mouseDownSwitch = false;
+
 })
+
 
 copyButton.onclick = () => {
     outputArea.select();
@@ -315,11 +399,16 @@ clearButton.onclick = () => {
                 thisItem.style.borderBottomRightRadius = 0;
             }
         })
-        console.log(arr);
-        linesArray = [];
-        config = Object.assign({}, template);
+        for (item of figuresBank) {
+            for (cell of item.reservedCells) {
+                cell.style.backgroundColor = '';
+                cell.style.borderRadius = '';
+            }
+        }
+
+        figuresBank = [];
+        visualUpdate();
+        config = JSON.parse(JSON.stringify(template));
         update('all');
     }
 }
-
-
