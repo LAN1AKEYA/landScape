@@ -16,9 +16,15 @@ const colsRan = document.getElementById('colsRan');
 const colsNum = document.getElementById('colsNum');
 const rowsRan = document.getElementById('rowsRan');
 const rowsNum = document.getElementById('rowsNum');
+const colorRan = document.getElementById('colorRan');
+const colorNum = document.getElementById('colorNum');
+
 const outputArea = document.getElementById('outputArea');
-const copyButton = document.getElementById('copyButton');
+const pen = document.getElementById('pen');
+const rubber = document.getElementById('rubber');
 const clearButton = document.getElementById('clearButton');
+const copyButton = document.getElementById('copyButton');
+
 
 const topBlock = document.getElementById('top');
 const rightBlock = document.getElementById('right');
@@ -149,6 +155,13 @@ function update(type) {
 
 update('all');
 
+let idCounter = 0;
+
+function getId() {
+    idCounter++;
+    return idCounter;
+}
+
 
 fatherId.onchange = () => {
     config.idContain = fatherId.value;
@@ -226,34 +239,39 @@ rowsNum.oninput = () => {
     rowsRan.value = rowsNum.value;
     config.heightFrame = rowsRan.value;
     update('rows');
-
 }
 
-function updateFigures(comand, figure) {
-    switch (comand) {
-        case "add":
-            config.lines.push({
-                position: {
-                    width: {
-                        start: figure.topLeftCell[0] + 1,
-                        end: figure.bottomRightCell[0] + 2
-                    },
-                    height: {
-                        start: figure.topLeftCell[1] + 1,
-                        end: figure.bottomRightCell[1] + 2
-                    }
-                },
-                force: figure.force,
-                duration: figure.duration,
-                color: figure.color
-            })
-            break;
-    }
+colorRan.oninput = () => {
+    colorNum.value = colorRan.value;
+}
+colorNum.oninput = () => {
+    colorRan.value = colorNum.value;
+}
 
+
+function updateFigures(figure) {
+
+    config.lines.push({
+        position: {
+            width: {
+                start: figure.topLeftCell[0] + 1,
+                end: figure.bottomRightCell[0] + 2
+            },
+            height: {
+                start: figure.topLeftCell[1] + 1,
+                end: figure.bottomRightCell[1] + 2
+            }
+        },
+        force: figure.force,
+        duration: figure.duration,
+        color: figure.color,
+        id: figure.id
+    })
 }
 
 class Figure {
-    constructor(force, duration, color) {
+    constructor(id, force, duration, color) {
+        this.id = id;
         this.topLeftCell = [];
         this.bottomRightCell = [];
         this.firstPoint = [];
@@ -300,7 +318,7 @@ function visualUpdate() {
             for (let cl = figure.topLeftCell[0]; cl <= figure.bottomRightCell[0]; cl++) {
                 selectedCellsBank.push(document.querySelector(`.c-${cl}.r-${rw}`));
             }
-        } 
+        }
 
         if (figure.reservedCells.length < selectedCellsBank.length) {
             figure.reservedCells = selectedCellsBank;
@@ -309,7 +327,7 @@ function visualUpdate() {
                 cell.style.backgroundColor = figure.color;
             }
             updateRadius();
-            
+
         }
         else if ((figure.reservedCells.length > selectedCellsBank.length)) {
             const minus = figure.reservedCells.filter(el => !selectedCellsBank.includes(el));
@@ -323,6 +341,20 @@ function visualUpdate() {
     })
 }
 
+let selectedTool = 'pen';
+
+pen.addEventListener('click', () => {
+    rubber.classList.remove('selected-tool');
+    pen.classList.add('selected-tool');
+    selectedTool = 'pen';
+})
+
+rubber.addEventListener('click', () => {
+    pen.classList.remove('selected-tool');
+    rubber.classList.add('selected-tool');
+    selectedTool = 'rubber';
+})
+
 
 grid.addEventListener('mousemove', (event) => {
     const positionX = event.clientX - leftBlock.offsetWidth - 300;
@@ -332,20 +364,26 @@ grid.addEventListener('mousemove', (event) => {
 
     if (mouseDownSwitch) {
 
-        figure.secondPoint = hoverItem;
+        if (selectedTool == 'pen') {
+            figure.secondPoint = hoverItem;
 
-        figure.topLeftCell = [
-            (figure.firstPoint[0] <= figure.secondPoint[0]) ? figure.firstPoint[0] : figure.secondPoint[0],
-            (figure.firstPoint[1] <= figure.secondPoint[1]) ? figure.firstPoint[1] : figure.secondPoint[1]
-        ];
-        figure.bottomRightCell = [
-            (figure.firstPoint[0] >= figure.secondPoint[0]) ? figure.firstPoint[0] : figure.secondPoint[0],
-            (figure.firstPoint[1] >= figure.secondPoint[1]) ? figure.firstPoint[1] : figure.secondPoint[1]
-        ]
+            figure.topLeftCell = [
+                (figure.firstPoint[0] <= figure.secondPoint[0]) ? figure.firstPoint[0] : figure.secondPoint[0],
+                (figure.firstPoint[1] <= figure.secondPoint[1]) ? figure.firstPoint[1] : figure.secondPoint[1]
+            ];
+            figure.bottomRightCell = [
+                (figure.firstPoint[0] >= figure.secondPoint[0]) ? figure.firstPoint[0] : figure.secondPoint[0],
+                (figure.firstPoint[1] >= figure.secondPoint[1]) ? figure.firstPoint[1] : figure.secondPoint[1]
+            ]
+            visualUpdate();
+        }
+        else {
+            console.log('rubber')
+        }
 
-        visualUpdate();
 
-        console.log(`FP-${figure.firstPoint}`, `SP-${figure.secondPoint}`, `TL-${figure.topLeftCell}`, `BR-${figure.bottomRightCell}`)
+
+        //console.log(`FP-${figure.firstPoint}`, `SP-${figure.secondPoint}`, `TL-${figure.topLeftCell}`, `BR-${figure.bottomRightCell}`)
 
     }
 
@@ -353,29 +391,60 @@ grid.addEventListener('mousemove', (event) => {
 
 grid.addEventListener('mousedown', (event) => {
     mouseDownSwitch = true;
-    figure = new Figure(1.001, 1, '#ffffff');
+    figure = new Figure(getId(), 1.001, 1, colorNum.value);
 
     const positionX = event.clientX - leftBlock.offsetWidth - 300;
     const positionY = event.clientY - topBlock.offsetHeight;
 
     hoverItem = [Math.floor(positionX / (Number(config.lineWidth) + Number(config.gap))), Math.floor(positionY / (Number(config.lineHeight) + Number(config.gap)))]
-    
-    figure.firstPoint = hoverItem;
-    figure.secondPoint = hoverItem;
 
-    figure.reservedCells = [];
 
-    figure.topLeftCell = figure.firstPoint;
-    figure.bottomRightCell = figure.firstPoint;
+    if (selectedTool == 'pen') {
 
-    visualUpdate();
+        figure.firstPoint = hoverItem;
+        figure.secondPoint = hoverItem;
+
+        figure.reservedCells = [];
+
+        figure.topLeftCell = figure.firstPoint;
+        figure.bottomRightCell = figure.firstPoint;
+
+        visualUpdate();
+    }
+    else if (selectedTool == 'rubber') {
+        let idForDelete;
+        for (item of figuresBank) {
+            if (item.topLeftCell[0] <= hoverItem[0] &&
+                item.topLeftCell[1] <= hoverItem[1] &&
+                item.bottomRightCell[0] >= hoverItem[0] &&
+                item.bottomRightCell[1] >= hoverItem[1]
+            ) {
+                for (cell of item.reservedCells) {
+                    cell.style.backgroundColor = '';
+                    cell.style.borderRadius = '';
+                }
+                idForDelete = item.id;
+
+                console.log(figuresBank)
+                figuresBank = figuresBank.filter(element => element.id !== item.id);
+                config.lines = config.lines.filter(element => element.id !== item.id);
+                updateOutput();
+                console.log(figuresBank);
+                break;
+
+            }
+        }
+    }
+
 })
 
 document.addEventListener('mouseup', (event) => {
     if (mouseDownSwitch) {
-        figuresBank.push(figure);
-        updateFigures('add', figure);
-        updateOutput();
+        if (selectedTool == 'pen') {
+            figuresBank.push(figure);
+            updateFigures(figure);
+            updateOutput();
+        }
     }
     mouseDownSwitch = false;
 

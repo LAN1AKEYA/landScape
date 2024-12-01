@@ -16,6 +16,7 @@ main {
     height: 100vh;
     display: grid;
     grid-template-columns: 1fr 10fr;
+    cursor: crosshair;
 }
 #frame {
     color: var(--ac-color);
@@ -122,6 +123,28 @@ input[type="range"] {
 input[type="number"] {
     max-width: 70px;
 }
+input[type="color"] {
+    width: 27px;
+    height: 27px;
+    cursor: pointer;
+}
+#colorNum {
+    max-width: 148px;
+}
+#rubber {
+    background: var(--bg-color) url(svg/rub-bg.svg);
+}
+#pen {
+    background: var(--bg-color) url(svg/pen-bg.svg);
+}
+#rubber, #pen {
+    background-size: 100%;
+    background-position: center -15px;
+}
+.selected-tool {
+    filter: invert(100%);
+    border-color: var(--bg-color);
+}
 textarea {
     height: 300px;
     resize: none;
@@ -140,6 +163,7 @@ button {
     transition: 0.3s;
     border-radius: 3px;
     position: relative;
+    height: 35px;
 }
 button:hover {
     background-color: var(--ac-color);
