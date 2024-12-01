@@ -11,8 +11,11 @@
         <main>
 
             <div id="control">
-                <div class="col col-2">
-                    <span>father id</span><input type="text" id="fatherId">
+                <div class="col header-col">
+                    <h2>contain settings</h2>
+                </div>
+                <div class="col">
+                    <input type="text" id="fatherId" placeholder="contain_id">
                 </div>
                 <div class="col col-3">
                     <span>width</span><input type="range" id="widthRan"
@@ -26,13 +29,13 @@
                 </div>
                 <div class="col col-3">
                     <span>gap</span><input type="range" id="gapRan" value="15"
-                        min="1" max="30"><input type="number" id="gapNum"
-                        value="15" min="1" max="30">
+                        min="0" max="30"><input type="number" id="gapNum"
+                        value="15" min="0" max="30">
                 </div>
                 <div class="col col-3">
                     <span>radius</span><input type="range" id="radiusRan"
-                        value="15" min="1" max="30"><input type="number"
-                        id="radiusNum" value="15" min="1" max="30">
+                        value="15" min="0" max="30"><input type="number"
+                        id="radiusNum" value="15" min="0" max="30">
                 </div>
                 <div class="col col-3">
                     <span>cols</span><input type="range" id="colsRan" value="10"
@@ -44,22 +47,42 @@
                         min="1" max="100"><input type="number" id="rowsNum"
                         value="10" min="1" max="100">
                 </div>
+                <div class="col header-col">
+                    <h2>sensivity</h2>
+                </div>
+                <div class="col col-2">
+                    <span>type</span>
+                    <select name="" id="">
+                        <option value="round">round</option>
+                        <option value="square">square</option>
+                    </select>
+                </div>
                 <div class="col col-3">
-                    <span>tool</span>
-                    <button id="pen" class="selected-tool"></button>
-                    <button id="rubber"></button>
-                    
+                    <span>sens</span><input type="range" id="sensivityRan" value="10"
+                        min="1" max="100"><input type="number" id="sensivityNum"
+                        value="10" min="1" max="100">
+                </div>
+                <div class="col header-col">
+                    <h2>line settings</h2>
                 </div>
                 <div class="col col-2">
                     <span>color</span>
                     <div class="col col-2" style="padding: 0;">
-                        <input type="text" name="" id="colorNum" value="#ffffff">
-                        <input type="color" name="" id="colorRan" value="#ffffff">
+                        <input type="text" name id="colorNum" value="#ffffff">
+                        <input type="color" name id="colorRan" value="#ffffff">
                     </div>
 
                 </div>
+                <div class="col col-3">
+                    <span>tool</span>
+                    <button id="pen" class="selected-tool"></button>
+                    <button id="rubber"></button>
+                </div>
+                <div class="col header-col">
+                    <h2>output</h2>
+                </div>
                 <div class="col">
-                    <textArea id="outputArea"></textArea>
+                    <textarea id="outputArea"></textarea>
                 </div>
                 <div class="col col-2">
                     <button id="clearButton">clear</button>

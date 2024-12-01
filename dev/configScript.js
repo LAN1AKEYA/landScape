@@ -32,7 +32,7 @@ const bottomBlock = document.getElementById('bottom');
 const leftBlock = document.getElementById('left');
 
 const template = {
-    idContain: 'contain',
+    idContain: '',
     gap: 15,
     lineWidth: 50,
     lineHeight: 50,
@@ -325,6 +325,7 @@ function visualUpdate() {
             for (cell of figure.reservedCells) {
                 cell.style.borderRadius = '';
                 cell.style.backgroundColor = figure.color;
+                cell.style.borderColor = figure.color;
             }
             updateRadius();
 
@@ -334,6 +335,7 @@ function visualUpdate() {
             for (cell of minus) {
                 cell.style.backgroundColor = '';
                 cell.style.borderRadius = '';
+                cell.style.borderColor = '';
             }
             figure.reservedCells = selectedCellsBank;
             updateRadius();
@@ -422,6 +424,7 @@ grid.addEventListener('mousedown', (event) => {
                 for (cell of item.reservedCells) {
                     cell.style.backgroundColor = '';
                     cell.style.borderRadius = '';
+                    cell.style.borderColor = '';
                 }
                 idForDelete = item.id;
 
