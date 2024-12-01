@@ -2,7 +2,7 @@ class Letter {
     constructor(config) {
         //idContain, widthFrame, heightFrame, lineWidth
         class Line {
-            constructor(position, force, duration, color) {
+            constructor(position, force, duration, color, invert, sensitivy) {
 
                 this.line = document.createElement('div');
                 this.line.classList.add('line');
@@ -19,11 +19,14 @@ class Letter {
                 this.duration = duration;
                 globalThis.letterFrame.appendChild(this.line);
                 this.rect = this.line.getBoundingClientRect();
+                if (invert) {
+                    this.line.style.top = `${((typeof (sensitivy) == 'number') ? sensitivy : Math.max(sensitivy.X, sensitivy.Y)) * this.duration}px`;
+                }
             }
             move(event, sensitivy, invert) {
                 let distance = Math.round(Math.sqrt((this.rect.left + this.rect.width / 2 - event[0]) ** 2 + (this.rect.top + this.rect.height / 2 - event[1]) ** 2));
                 if (!invert) {
-                    distance = -(distance - sensitivy);
+                    distance = -(distance - ((typeof (sensitivy) == 'number') ? sensitivy : Math.max(sensitivy.X, sensitivy.Y)));
                 }
 
                 if (typeof (sensitivy) == 'number') {
@@ -42,6 +45,9 @@ class Letter {
                         event[1] < (this.rect.top + this.rect.height) + sensitivy.Y / 2
                     ) {
                         this.line.style.top = `${distance ** this.force * this.duration}px`;
+                    }
+                    else {
+                        this.line.style.top = invert ? distance : 0;
                     }
                 }
             }
@@ -62,7 +68,7 @@ class Letter {
 
 
         for (let line of config.lines) {
-            this.linesArray.push(new Line(line.position, line.force, line.duration, line.color));
+            this.linesArray.push(new Line(line.position, line.force, line.duration, line.color, config.invert, config.sensitivy));
         }
 
 
@@ -79,11 +85,11 @@ class Letter {
 const currentSrc = document.currentScript.src;
 let lettersArray = [];
 fetch(new URL('../config.json', currentSrc))
-.then(response => response.json())
-.then((config) => {
-    if (config) {
-        for (letter of config) {
-            lettersArray.push(new Letter(letter));
+    .then(response => response.json())
+    .then((config) => {
+        if (config) {
+            for (letter of config) {
+                lettersArray.push(new Letter(letter));
+            }
         }
-    }
-})
+    })

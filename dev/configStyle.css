@@ -149,6 +149,13 @@ input[type="color"] {
     width: 27px;
     height: 27px;
     cursor: pointer;
+    margin: 0;
+}
+input[type="checkbox"] {
+    width: 23px;
+    height: 23px;
+    cursor: pointer;
+    margin: 0;
 }
 select {
     background-color: var(--bg-color);

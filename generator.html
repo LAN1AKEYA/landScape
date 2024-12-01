@@ -48,19 +48,37 @@
                         value="10" min="1" max="100">
                 </div>
                 <div class="col header-col">
-                    <h2>sensivity</h2>
+                    <h2>sensivity/movement</h2>
                 </div>
                 <div class="col col-2">
                     <span>type</span>
-                    <select name="" id="">
+                    <select name="" id="sensType">
                         <option value="round">round</option>
                         <option value="square">square</option>
                     </select>
                 </div>
-                <div class="col col-3">
-                    <span>sens</span><input type="range" id="sensivityRan" value="10"
-                        min="1" max="100"><input type="number" id="sensivityNum"
-                        value="10" min="1" max="100">
+                <section id="sensRoundContain">
+                    <div class="col col-3">
+                        <span>radius</span><input type="range" id="sensRanR" value="200"
+                        min="0" max="1000"><input type="number" id="sensNumR"
+                        value="200" min="0" max="1000">
+                    </div>
+                </section>
+                <section id="sensSquareContain">
+                    <div class="col col-3">
+                        <span>X</span><input type="range" id="sensRanX" value="200"
+                        min="0" max="1000"><input type="number" id="sensNumX"
+                        value="200" min="0" max="1000">
+                    </div>
+                    <div class="col col-3">
+                        <span>Y</span><input type="range" id="sensRanY" value="200"
+                        min="0" max="1000"><input type="number" id="sensNumY"
+                        value="200" min="0" max="1000">
+                    </div>
+                </section>
+                <div class="col col-2" style="grid-template-columns: 10fr 1fr;">
+                    <span>invert position ---> </span>
+                    <input type="checkbox" name="invert" id="invertCheck">
                 </div>
                 <div class="col header-col">
                     <h2>line settings</h2>

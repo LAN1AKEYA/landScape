@@ -18,6 +18,16 @@ const rowsRan = document.getElementById('rowsRan');
 const rowsNum = document.getElementById('rowsNum');
 const colorRan = document.getElementById('colorRan');
 const colorNum = document.getElementById('colorNum');
+const sensType = document.getElementById('sensType');
+const sensRoundContain = document.getElementById('sensRoundContain');
+const sensSquareContain = document.getElementById('sensSquareContain');
+const sensRanR = document.getElementById('sensRanR');
+const sensNumR = document.getElementById('sensNumR');
+const sensRanX = document.getElementById('sensRanX');
+const sensNumX = document.getElementById('sensNumX');
+const sensRanY = document.getElementById('sensRanY');
+const sensNumY = document.getElementById('sensNumY');
+const invertCheck = document.getElementById('invertCheck');
 
 const outputArea = document.getElementById('outputArea');
 const pen = document.getElementById('pen');
@@ -97,7 +107,6 @@ function updateRows() {
     bottomBlock.style.height = `calc(((100vh / 2) - (${(config.lineHeight * config.heightFrame) + (config.gap * (config.heightFrame - 1))}px / 2))`;
 
     leftBlock.style.height = rightBlock.style.height = `${(config.lineHeight * config.heightFrame) + (config.gap * (config.heightFrame - 1))}px`;
-
 }
 
 function updateOutput() {
@@ -241,12 +250,105 @@ rowsNum.oninput = () => {
     update('rows');
 }
 
+sensType.oninput = () => {
+    switch (sensType.value) {
+        case "round":
+            sensRoundContain.style.display = '';
+            sensSquareContain.style.display = 'none';
+            config.sensitivy = getSens();
+            update('all');
+            break;
+        case "square":
+            sensSquareContain.style.display = '';
+            sensRoundContain.style.display = 'none';
+            config.sensitivy = getSens();
+            update('all');
+            break;
+    }
+}
+
+sensRoundContain.style.display = '';
+sensSquareContain.style.display = 'none';
+
+sensRanR.oninput = () => {
+    sensNumR.value = sensRanR.value;
+
+    sensRanX.value = sensRanR.value;
+    sensNumX.value = sensRanR.value;
+    sensRanY.value = sensRanR.value;
+    sensNumY.value = sensRanR.value;
+    config.sensitivy = getSens();
+    update('all');
+}
+sensNumR.oninput = () => {
+    sensRanR.value = sensNumR.value;
+
+    sensRanX.value = sensNumR.value;
+    sensNumX.value = sensNumR.value;
+    sensRanY.value = sensNumR.value;
+    sensNumY.value = sensNumR.value;
+    config.sensitivy = getSens();
+    update('all');
+}
+sensRanX.oninput = () => {
+    sensNumX.value = sensRanX.value;
+
+    sensRanR.value = Math.round((Number(sensRanX.value) + Number(sensRanY.value)) / 2);
+    sensNumR.value = Math.round((Number(sensRanX.value) + Number(sensRanY.value)) / 2);
+    config.sensitivy = getSens();
+    update('all');
+}
+sensNumX.oninput = () => {
+    sensRanX.value = sensNumX.value;
+
+    sensRanR.value = Math.round((Number(sensRanX.value) + Number(sensRanY.value)) / 2);
+    sensNumR.value = Math.round((Number(sensRanX.value) + Number(sensRanY.value)) / 2);
+    config.sensitivy = getSens();
+    update('all');
+}
+sensRanY.oninput = () => {
+    sensNumY.value = sensRanY.value;
+
+    sensRanR.value = Math.round((Number(sensRanX.value) + Number(sensRanY.value)) / 2);
+    sensNumR.value = Math.round((Number(sensRanX.value) + Number(sensRanY.value)) / 2);
+    config.sensitivy = getSens();
+    update('all');
+}
+sensNumY.oninput = () => {
+    sensRanY.value = sensNumY.value;
+
+    sensRanR.value = Math.round((Number(sensRanX.value) + Number(sensRanY.value)) / 2);
+    sensNumR.value = Math.round((Number(sensRanX.value) + Number(sensRanY.value)) / 2);
+    config.sensitivy = getSens();
+    update('all');
+}
+
+function getSens() {
+    switch (sensType.value) {
+        case "round":
+            return Number(sensNumR.value);
+        case "square":
+            return {
+                X: Number(sensNumX.value),
+                Y: Number(sensNumY.value)
+            }
+
+    }
+}
+
+invertCheck.oninput = () => {
+    config.invert = invertCheck.checked;
+    update('all');
+}
+
+
 colorRan.oninput = () => {
     colorNum.value = colorRan.value;
 }
 colorNum.oninput = () => {
     colorRan.value = colorNum.value;
 }
+
 
 
 function updateFigures(figure) {
