@@ -2,12 +2,12 @@ class Letter {
     constructor(config) {
         //idContain, widthFrame, heightFrame, lineWidth
         class Line {
-            constructor(position, force, duration) {
+            constructor(position, force, duration, color) {
 
                 this.line = document.createElement('div');
                 this.line.classList.add('line');
                 this.line.style = `
-                background-color: #ffffff;
+                background-color: ${color};
                 border-radius: ${config.lineRadius};
                 position: relative;
                 `;
@@ -62,7 +62,7 @@ class Letter {
 
 
         for (let line of config.lines) {
-            this.linesArray.push(new Line(line.position, line.force, line.duration));
+            this.linesArray.push(new Line(line.position, line.force, line.duration, line.color));
         }
 
 
@@ -87,9 +87,3 @@ fetch(new URL('../config.json', currentSrc))
         }
     }
 })
-
-
-/*
-let buk = new Letter(
-
-)*/
