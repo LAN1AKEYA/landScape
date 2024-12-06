@@ -81,9 +81,10 @@ main {
     position: absolute;
     z-index: 1;
     width: 300px;
-    height: 100vh;
+    min-height: 100vh;
     box-sizing: border-box;
     background-color: var(--bg-color);
+    overflow-y: scroll;
 }
 #control * {
     font-family: "Courier New";
